@@ -1,1 +1,2 @@
-# streamlit-to-heroku-tutorial
+# Otan Spotter Web Interface
+Live bounding box predictions and object tracking from drone videos
