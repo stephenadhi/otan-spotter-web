@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 def main():
-    st.header("SpyCam Prototype v1.0")
+    st.header("OtanSpotter Prototype v1.0")
 
     video_sendonly_page = "Video Frames"
     audio_sendonly_page = "Audio Analysis"
