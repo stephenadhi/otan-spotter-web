@@ -17,14 +17,14 @@ def main():
     st.header("OtanSpotter Prototype v1.0")
 
     video_sendonly_page = "Video Frames"
-    audio_sendonly_page = "Audio Analysis"
+    #audio_sendonly_page = "Audio Analysis"
     object_detection_page = "Real-time Object Detection"
 
     app_mode = st.sidebar.selectbox(
         "Choose the app mode",
         [
             video_sendonly_page,
-            audio_sendonly_page,
+            #audio_sendonly_page,
             object_detection_page,
         ],
     )
@@ -34,8 +34,8 @@ def main():
         app_object_detection()
     elif app_mode == video_sendonly_page:
         app_sendonly_video()
-    elif app_mode == audio_sendonly_page:
-        app_sendonly_audio()
+    #elif app_mode == audio_sendonly_page:
+     #   app_sendonly_audio()
 
     logger.debug("=== Alive threads ===")
     for thread in threading.enumerate():
