@@ -16,7 +16,7 @@ def marker_generator(foliumMap, tooltipStr, foliumIframe):
     pass
     # number of markers
     n = random.randrange(start=2,stop= 10, step=1)
-    print("random markers n= ", n)
+    print("random markers N= ", n)
     for i in range(n):
         randLat= random.random()*INTERVAL_VERTICAL
         randLon= random.random()*INTERVAL_HORIZONTAL
