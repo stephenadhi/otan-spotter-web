@@ -1,10 +1,10 @@
 av==8.0.3
-matplotlib==3.1.2
+matplotlib>=3.1.2
 numpy>=1.17.4
 opencv_python_headless==4.5.4.58
 pydub==0.25.1
-streamlit==1.1.0
-streamlit_webrtc==0.31.1
+streamlit
+streamlit_webrtc
 typing_extensions==3.7.4.1
 folium
 streamlit_folium

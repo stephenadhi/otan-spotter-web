@@ -15,10 +15,18 @@ from streamlit_webrtc import (
     webrtc_streamer,
     RTCConfiguration
 )
+import streamlit.components.v1 as components
+
 logger = logging.getLogger(__name__)
 RTC_CONFIGURATION = RTCConfiguration(
     {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
 )
+def home_page_html():
+    HtmlFile = open("home.html", 'r', encoding='utf-8')
+    source_code = HtmlFile.read()
+    components.html(source_code, height=1600, width=1600)
+
+
 
 def app_sendonly_video():
 
