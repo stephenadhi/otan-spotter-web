@@ -16,7 +16,7 @@ INTERVAL_VERTICAL = BORNEO_UPPER - BORNEO_LOWER
 from folium.map import Icon, Tooltip
 # Random Marker Generator
 def marker_generator(foliumMap, tooltipStr, foliumIframe):
-    pass
+    
     # number of markers
     n_fire = random.randrange(start=2,stop= 10, step=1)
     print("random markers N= ", n_fire)
@@ -24,14 +24,19 @@ def marker_generator(foliumMap, tooltipStr, foliumIframe):
         randLat= random.random()*INTERVAL_VERTICAL
         randLon= random.random()*INTERVAL_HORIZONTAL
         randLoc= [BORNEO_LOWER+randLat,BORNEO_LEFT + randLon] 
-        # TO DO: ADD Radius
-        # randRadius= random.random
+        
+        # radius in Meter
+        # Calculator https://www.sensorsone.com/circle-area-to-radius-calculator
+        randRadius= random.random()*20000 + 5000
+        folium.Circle(randLoc,
+            radius= randRadius
+        ).add_to(foliumMap)
         folium.Marker(randLoc,
             popup=folium.Popup(foliumIframe, max_width=800),
             tooltip=tooltipStr,
             icon=folium.Icon(color='red',icon='fire')).add_to(foliumMap)
 
-
+    # Animal Population Markers
     n_population_marker = random.randrange(start=3, stop= 12, step=1)
     for j in range(n_population_marker):
         randLat= random.random()*INTERVAL_VERTICAL
@@ -39,15 +44,13 @@ def marker_generator(foliumMap, tooltipStr, foliumIframe):
         randLoc= [BORNEO_LOWER+randLat,BORNEO_LEFT + randLon]
 
         randPop = random.randrange(start=4, stop= 16, step=1)
-        htmlPopup = f"<p><strong>Location</strong>: {randLoc}</p><p><strong>Population</strong>: {randPop}</p>"
+        randGroup = random.randrange(start=4, stop= 64, step=1)
+        randLocFormatted = f'[{randLoc[0]:.3f}, {randLoc[1]:.3f}]'
+        htmlPopup = f"<h2 id=\"animal-group\">Group ID #{randGroup}</h2><p><strong>Location</strong>: {randLocFormatted}</p><p><strong>Population</strong>: {randPop}</p>"
         folium.Marker(randLoc,
             popup=folium.Popup(html=htmlPopup, max_width= 300),
-            tooltip="Click for more details.",
+            tooltip="Animal Group. Click for more details.",
             icon=folium.Icon(color='green', icon='paw', prefix='fa')).add_to(foliumMap)
-
-
-        )
-
 
 
 # Initialize Map
@@ -60,6 +63,22 @@ fireLogo = folium.CustomIcon('fire.png', icon_size=(50, 50))
 iframe_YT = folium.IFrame(html=html_embed_yt,height="400px",width="600px")
 
 # Markers
+## Drone
+randLat= random.random()*INTERVAL_VERTICAL
+randLon= random.random()*INTERVAL_HORIZONTAL
+randLoc= [BORNEO_LOWER+randLat,BORNEO_LEFT + randLon]
+
+randPop = random.randrange(start=4, stop= 16, step=1)
+randGroup = random.randrange(start=4, stop= 64, step=1)
+randLocFormatted = f'[{randLoc[0]:.3f}, {randLoc[1]:.3f}]'
+htmlPopup = f"<h2 id=\"Drone\">Drone ID #{randGroup}</h2><p><strong>Location</strong>: {randLocFormatted}</p><p><strong>Population</strong>: {randPop}</p>"
+
+folium.Marker(randLoc,
+    popup=folium.Popup(iframe_YT, max_width= 300),
+    tooltip="Drone. Click for more details.",
+    icon=folium.Icon(color='blue', icon='plane', prefix='fa')).add_to(m)
+
+## Fire (Legacy)
 folium.Marker([1.1, 114.5],
             popup='<strong>Fire 01</strong>',
             tooltip=tooltip_Fire,
