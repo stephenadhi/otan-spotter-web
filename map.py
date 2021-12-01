@@ -7,6 +7,9 @@ BORNEO_LOWER = -2.16
 BORNEO_LEFT = 115.52
 BORNEO_RIGHT = 110.49
 
+# Icon Websites
+
+
 INTERVAL_HORIZONTAL = BORNEO_RIGHT - BORNEO_LEFT
 INTERVAL_VERTICAL = BORNEO_UPPER - BORNEO_LOWER
 
@@ -15,18 +18,35 @@ from folium.map import Icon, Tooltip
 def marker_generator(foliumMap, tooltipStr, foliumIframe):
     pass
     # number of markers
-    n = random.randrange(start=2,stop= 10, step=1)
-    print("random markers N= ", n)
-    for i in range(n):
+    n_fire = random.randrange(start=2,stop= 10, step=1)
+    print("random markers N= ", n_fire)
+    for i in range(n_fire):
         randLat= random.random()*INTERVAL_VERTICAL
         randLon= random.random()*INTERVAL_HORIZONTAL
         randLoc= [BORNEO_LOWER+randLat,BORNEO_LEFT + randLon] 
-        
+        # TO DO: ADD Radius
+        # randRadius= random.random
         folium.Marker(randLoc,
             popup=folium.Popup(foliumIframe, max_width=800),
             tooltip=tooltipStr,
             icon=folium.Icon(color='red',icon='fire')).add_to(foliumMap)
 
+
+    n_population_marker = random.randrange(start=3, stop= 12, step=1)
+    for j in range(n_population_marker):
+        randLat= random.random()*INTERVAL_VERTICAL
+        randLon= random.random()*INTERVAL_HORIZONTAL
+        randLoc= [BORNEO_LOWER+randLat,BORNEO_LEFT + randLon]
+
+        randPop = random.randrange(start=4, stop= 16, step=1)
+        htmlPopup = f"<p><strong>Location</strong>: {randLoc}</p><p><strong>Population</strong>: {randPop}</p>"
+        folium.Marker(randLoc,
+            popup=folium.Popup(html=htmlPopup, max_width= 300),
+            tooltip="Click for more details.",
+            icon=folium.Icon(color='green', icon='paw', prefix='fa')).add_to(foliumMap)
+
+
+        )
 
 
 
