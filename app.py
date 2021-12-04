@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 def main():
     st.header("OtanSpotter Prototype v1.0")
-    view_home_page = ""
+    view_home_page = "Home"
     video_sendonly_page = "Camera View"
     view_map_page = "Location Tracking"
     object_detection_page = "Real-time Object Detection"
@@ -30,7 +30,6 @@ def main():
             view_map_page,
         ],
     )
-    st.subheader(app_mode)
 
     if app_mode == view_home_page:
         home_page_html()
