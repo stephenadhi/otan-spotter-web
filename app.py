@@ -1,5 +1,5 @@
 from object_detection import app_object_detection
-from utils import home_page_html, app_sendonly_video, app_sendonly_audio
+from utils import home_page_html, app_sendonly_video, camera_view
 from view_map import app_view_map
 
 import logging
@@ -16,8 +16,8 @@ logger = logging.getLogger(__name__)
 
 def main():
     st.header("OtanSpotter Prototype v1.0")
-    view_home_page = "Home"
-    video_sendonly_page = "Video Frames"
+    view_home_page = ""
+    video_sendonly_page = "Camera View"
     view_map_page = "Location Tracking"
     object_detection_page = "Real-time Object Detection"
 
@@ -37,7 +37,8 @@ def main():
     elif app_mode == object_detection_page:
         app_object_detection()
     elif app_mode == video_sendonly_page:
-        app_sendonly_video()
+        camera_view()
+        st.sidebar.markdown("___")  #  Add horizontal line to sidebar
     elif app_mode == view_map_page:
         app_view_map()
 

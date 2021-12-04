@@ -16,6 +16,12 @@ from streamlit_webrtc import (
     RTCConfiguration
 )
 import streamlit.components.v1 as components
+# Video getting and saving
+import urllib
+import m3u8
+import time
+import streamlit as st
+import pafy  # needs youtube_dl
 
 logger = logging.getLogger(__name__)
 RTC_CONFIGURATION = RTCConfiguration(
@@ -218,3 +224,106 @@ def download_file(url, download_to: Path, expected_size=None):
             weights_warning.empty()
         if progress_bar is not None:
             progress_bar.empty()
+
+
+def watch_video(video_url, image_placeholder, n_segments=1,
+                n_frames_per_segment=60):
+    """Gets a video clip,
+        video_url: YouTube video URL
+				image_placeholder: streamlit image placeholder <where clip will display
+				n_segments: how many segments of the YouTube stream to pull (max 7)
+				n_frames_per_segment: how many frames each segment should be, max ~110
+				"""
+    ####################################
+    # SETUP BEFORE PLAYING VIDEO TO GET VIDEO URL
+    ####################################
+
+    # Speed up playing by only showing every nth frame
+    skip_n_frames = 5
+    video_warning = st.warning("showing a clip from youTube...")
+
+    # Use pafy to get the 360p url
+    url = video_url
+    video = pafy.new(url)
+
+    best = video.getbest(preftype="mp4")  #  Get best resolution stream available
+    # In this specific case, the 3rd entry is the 360p stream,
+    #   But that's not ALWAYS true.
+    #medVid = video.streams[2]
+    medVid = best
+    #  load a list of current segments for live stream
+    playlist = m3u8.load(medVid.url)
+
+    # will hold all frames at the end
+    # can be memory intestive, so be careful here
+    frame_array = []
+
+    # Speed processing by skipping n frames, so we need to keep track
+    frame_num = 0
+
+    ###################################
+    # Loop over each frame of video, and each segment
+    ###################################
+    #  Loop through all segments
+    for i in playlist.segments[0:n_segments]:
+
+        capture = cv2.VideoCapture(i.uri)
+
+        # go through every frame in each segment
+        for i in range(n_frames_per_segment):
+
+            # open CV function to pull a frame out of video
+            success, frame = capture.read()
+            if not success:
+                break
+
+            # Skip every nth frame to speed processing up
+            if (frame_num % skip_n_frames != 0):
+                frame_num += 1
+                pass
+            else:
+                frame_num += 1
+
+                # Show the image in streamlit, then pause
+                image_placeholder.image(frame, channels="BGR")
+                time.sleep(0.5)
+
+    # Clean up everything when finished
+    capture.release()  # free the video
+
+    # Removes the "howing a clip from youTube" message"
+    video_warning.empty()
+
+    st.write("Done with clip, frame length", frame_num)
+
+    return None
+
+
+def camera_view():
+    # streamlit placeholder for image/video
+    image_placeholder = st.empty()
+
+    # url for video
+    # Jackson hole town square, live stream
+    video_url = "https://www.youtube.com/watch?v=DoUOrTJbIu4"
+
+    # Description for the sidebar options
+    st.sidebar.write("Set options for processing video, then process a clip.")
+
+    # Make a slider bar from 60-360 with a step size of 60
+    #  st.sidebar is going to make this appear on the sidebar
+    n_frames = 30  # Frames per 'segment"
+    n_segments = st.sidebar.slider("How many frames should this video be:",
+                                   n_frames, n_frames * 6, n_frames, step=n_frames, key="spots",
+                                   help="It comes in 7 segments, 100 frames each")
+
+    # We actually need to know the number of segments,
+    #   so convert the total number of frames to the number of segments we want
+    n_segments = int(n_segments / n_frames)
+
+    # Add a "go" button to show the clip in streamlit
+    if st.sidebar.button("watch video clip"):
+        watch_video(video_url=video_url,
+                    image_placeholder=image_placeholder,
+                    n_segments=n_segments,
+                    n_frames_per_segment=n_frames)

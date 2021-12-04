@@ -8,4 +8,6 @@ streamlit_webrtc
 typing_extensions==3.7.4.1
 folium
 streamlit_folium
-
+youtube_dl
+m3u8
+pafy
