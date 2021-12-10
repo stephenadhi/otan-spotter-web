@@ -19,4 +19,4 @@ import folium
 def app_view_map():
     HtmlFile = open("map.html", 'r', encoding='utf-8')
     source_code = HtmlFile.read()
-    components.html(source_code, height=1600, width=1600)
+    components.html(source_code, height=800, width=800)
