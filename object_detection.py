@@ -44,6 +44,7 @@ CLASSES = [
     "train",
     "tvmonitor",
 ]
+
 COLORS = np.random.uniform(0, 255, size=(len(CLASSES), 3))
 
 
