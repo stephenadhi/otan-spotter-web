@@ -3,6 +3,7 @@ import av
 import cv2
 import queue
 import streamlit as st
+import torch
 from pathlib import Path
 from typing import List, NamedTuple
 from streamlit_webrtc import (
@@ -14,35 +15,18 @@ from streamlit_webrtc import (
 RTC_CONFIGURATION = RTCConfiguration(
     {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
 )
+from models.common import DetectMultiBackend
+from utils.general import (LOGGER, check_file, check_img_size, check_imshow, check_requirements, colorstr,
+                           increment_path, non_max_suppression, print_args, scale_coords, strip_optimizer, xyxy2xywh)
+from utils.torch_utils import select_device, time_sync
 
-from utils import download_file
 import logging
 
 logger = logging.getLogger(__name__)
 HERE = Path(__file__).parent
 
 CLASSES = [
-    "background",
-    "aeroplane",
-    "bicycle",
-    "bird",
-    "boat",
-    "bottle",
-    "bus",
-    "car",
-    "cat",
-    "chair",
-    "cow",
-    "diningtable",
-    "dog",
-    "horse",
-    "motorbike",
-    "person",
-    "pottedplant",
-    "sheep",
-    "sofa",
-    "train",
-    "tvmonitor",
+'Fire', 'crocodile', 'elephant', 'hippopotamus', 'human', 'lion', 'pig', 'rhinoceros', 'smoke', 'zebra'
 ]
 
 COLORS = np.random.uniform(0, 255, size=(len(CLASSES), 3))
@@ -53,13 +37,7 @@ def app_object_detection():
     This model and code are based on
     https://github.com/robmarkcole/object-detection-app
     """
-    MODEL_URL = "https://github.com/robmarkcole/object-detection-app/raw/master/model/MobileNetSSD_deploy.caffemodel"  # noqa: E501
-    MODEL_LOCAL_PATH = HERE / "./models/MobileNetSSD_deploy.caffemodel"
-    PROTOTXT_URL = "https://github.com/robmarkcole/object-detection-app/raw/master/model/MobileNetSSD_deploy.prototxt.txt"  # noqa: E501
-    PROTOTXT_LOCAL_PATH = HERE / "./models/MobileNetSSD_deploy.prototxt.txt"
-
-    download_file(MODEL_URL, MODEL_LOCAL_PATH, expected_size=23147564)
-    download_file(PROTOTXT_URL, PROTOTXT_LOCAL_PATH, expected_size=29353)
+    MODEL_LOCAL_PATH = HERE / "./models/best0512.onnx"
 
     DEFAULT_CONFIDENCE_THRESHOLD = 0.5
 
@@ -72,9 +50,16 @@ def app_object_detection():
         result_queue: "queue.Queue[List[Detection]]"
 
         def __init__(self) -> None:
-            self._net = cv2.dnn.readNetFromCaffe(
-                str(PROTOTXT_LOCAL_PATH), str(MODEL_LOCAL_PATH)
-            )
+            # Load model
+            #imgsz = 640,  # inference size (pixels)
+            #device = ''
+            #device = select_device(device)
+            #weights = models/
+            #model = DetectMultiBackend(weights, device=device, dnn=dnn)
+            #stride, names, pt, jit, onnx, engine = model.stride, model.names, model.pt, model.jit, model.onnx, model.engine
+            #imgsz = check_img_size(imgsz, s=stride)  # check image size
+            self._net = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True).autoshape()
+
             self.confidence_threshold = DEFAULT_CONFIDENCE_THRESHOLD
             self.result_queue = queue.Queue()
 
@@ -125,6 +110,8 @@ def app_object_detection():
             self.result_queue.put(result)
 
             return av.VideoFrame.from_ndarray(annotated_image, format="bgr24")
+
+    video_url = "https://www.youtube.com/watch?v=3SxlPAQbASE"
 
     webrtc_ctx = webrtc_streamer(
         key="object-detection",
