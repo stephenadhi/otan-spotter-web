@@ -17,6 +17,6 @@ import folium
     # return folium_static(m)
 
 def app_view_map():
-    HtmlFile = open("map.html", 'r', encoding='utf-8')
+    HtmlFile = open("mapgenerator/map.html", 'r', encoding='utf-8')
     source_code = HtmlFile.read()
     components.html(source_code, height=800, width=800)

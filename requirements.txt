@@ -1,6 +1,4 @@
 av==8.0.3
-matplotlib>=3.1.2
-numpy>=1.17.4
 opencv_python_headless==4.5.4.58
 pydub==0.25.1
 streamlit
@@ -11,3 +9,17 @@ streamlit_folium
 youtube_dl
 m3u8
 pafy
+
+# Base Yolov5 ----------------------------------------
+matplotlib>=3.2.2
+numpy>=1.18.5
+opencv-python>=4.1.2
+Pillow>=7.1.2
+PyYAML>=5.3.1
+requests>=2.23.0
+scipy>=1.4.1
+torch>=1.7.0
+torchvision>=0.8.1
+tqdm>=4.41.0
+seaborn
+requests-toolbelt

@@ -1,7 +1,7 @@
 from object_detection import app_object_detection
-from utils import home_page_html, app_sendonly_video, camera_view
+from app_utils import home_page_html, app_sendonly_video, camera_view
 from view_map import app_view_map
-
+from object_detection import app_object_detection
 import logging
 import threading
 import streamlit as st
@@ -17,26 +17,26 @@ logger = logging.getLogger(__name__)
 def main():
     st.header("OtanSpotter Prototype v1.0")
     view_home_page = "Home"
-    video_sendonly_page = "Camera View"
+    video_sendonly_page = "Real-time Inference"
     view_map_page = "Location Tracking"
-    object_detection_page = "Real-time Object Detection"
+    #object_detection_page = "Real-time Object Detection"
 
     app_mode = st.sidebar.selectbox(
         "Choose the app mode",
         [
             view_home_page,
             video_sendonly_page,
-            object_detection_page,
+       #     object_detection_page,
             view_map_page,
         ],
     )
 
     if app_mode == view_home_page:
         home_page_html()
-    elif app_mode == object_detection_page:
-        app_object_detection()
+    #elif app_mode == object_detection_page:
+     #   app_object_detection()
     elif app_mode == video_sendonly_page:
-        camera_view()
+        app_object_detection()
         st.sidebar.markdown("___")  #  Add horizontal line to sidebar
     elif app_mode == view_map_page:
         app_view_map()
