@@ -2,8 +2,8 @@
 - Dashboard
 - Live bounding box predictions and object tracking from drone videos
 - Rescue and notification alarm
-- Deployment: 
-- 
+- Deployment can be seen in: https://otanspotter.herokuapp.com
+
 # Setup
 To install dependencies:
 
